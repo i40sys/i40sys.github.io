@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <link href="https://fonts.googleapis.com/css?family=Offside&display=swap" rel="stylesheet">
+      <style>
+        body {
+          background: #fff;
+          font-family: 'Offside', serif;
+        }
+        input {
+          font-family: 'Offside', serif;
+        }
+      </style>
+  </head>
+  <body>
+    <hr />
+    <h3>Comentarios:</h3>
+  </body>
+  <script>
+    // add content of this page after some time
+    setTimeout(addContent, 2000);    
+    // what is my iframe element
+    const all_iframes = window.parent.document.getElementsByTagName('iframe');
+    const array_all_iframes = Array.from(all_iframes);
+    const my_iframe = array_all_iframes.filter(element => element.getAttribute('src').search('/widgets/comments.html') > 0)[0];
+    // force iframe height size defined in Notion
+    const el = my_iframe.parentElement.parentElement.parentElement.parentElement;
+    const h = el.style.height;
+    el.style.setProperty('height',h, 'important');
+    
+    function addContent() {
+      let body = document.querySelector('body');
+      // <section id="isso-thread" data-title="${window.parent.parent.document.title}" data-isso-id="${window.parent.parent.document.notionPageID}">      
+      /*
+      body.innerHTML += `
+      <section 
+        id="isso-thread" 
+        data-title="${window.parent.document.title}" 
+        data-isso-id="${window.parent.document.querySelectorAll('div.notion-page-block')[0].getAttribute('data-block-id').replaceAll('-','')}">
+      </section>`
+      */
+      let isso = document.createElement('section');
+      isso.setAttribute('id','isso-thread');
+      isso.setAttribute('data-tittle', window.parent.document.title);
+      isso.setAttribute('data-isso-id', window.parent.document.querySelectorAll('div.notion-page-block')[0].getAttribute('data-block-id').replaceAll('-',''));
+      document.body.appendChild(isso);
+
+      let s = document.createElement('script');
+      s.setAttribute('data-isso', '/comments/');
+      //s.setAttribute('data-isso-id', window.parent.parent.document.notionPageID);
+      s.setAttribute('data-isso-id', window.parent.document.querySelectorAll('div.notion-page-block')[0].getAttribute('data-block-id').replaceAll("-",''));
+      s.setAttribute('src', '/comments/js/embed.min.js');
+      s.setAttribute('data-isso-css', "true");
+      s.setAttribute('data-isso-lang', "es");
+      s.setAttribute('data-isso-reply-to-self', "false");
+      s.setAttribute('data-isso-require-author', "false");
+      s.setAttribute('data-isso-require-email', "false");
+      s.setAttribute('data-isso-max-comments-top', "10");
+      s.setAttribute('data-isso-max-comments-nested', "5");
+      s.setAttribute('data-isso-reveal-on-click', "5");
+      s.setAttribute('data-isso-avatar', "true");
+      s.setAttribute('data-isso-avatar-bg', "#f0f0f0");
+      s.setAttribute('data-isso-avatar-fg', "#9abf88 #5698c4 #e279a3 #9163b6");
+      s.setAttribute('data-isso-vote', "true");
+      s.setAttribute('data-isso-vote-levels', "");
+      s.setAttribute('data-isso-feed', "false");
+      var es = document.getElementsByTagName('script')[0];
+      es.parentNode.insertBefore(s, es);
+    }
+  </script>
+</html>
